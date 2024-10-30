@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <cstdio>
 #include "main.h"
 
 void uninitializedVariableExample() {
@@ -24,6 +25,25 @@ void insecureHttpRequestExample() {
     // Simulate an HTTP request (actual network code omitted for simplicity)
 }
 
+void unsafeGetsExample() {
+    char buffer[10];
+    std::cout << "Enter a string: ";
+    gets(buffer); // Unsafe function, can cause buffer overflow
+    std::cout << "You entered: " << buffer << std::endl;
+}
+
+void unsafeStrcpyExample(const char *input) {
+    char buffer[10];
+    strcpy(buffer, input); // Unsafe function, can cause buffer overflow
+    std::cout << "Buffer content: " << buffer << std::endl;
+}
+
+void unsafeSprintfExample(const char *input) {
+    char buffer[10];
+    sprintf(buffer, "%s", input); // Unsafe function, can cause buffer overflow
+    std::cout << "Buffer content: " << buffer << std::endl;
+}
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
     
@@ -38,6 +58,11 @@ int main() {
 
     // Demonstrate insecure HTTP request
     insecureHttpRequestExample();
+
+    // Demonstrate unsafe functions
+    unsafeGetsExample();
+    unsafeStrcpyExample("This is a very long input that will overflow the buffer");
+    unsafeSprintfExample("This is a very long input that will overflow the buffer");
 
     return 0;
 }
