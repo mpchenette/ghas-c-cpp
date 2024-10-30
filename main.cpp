@@ -106,6 +106,45 @@ Record *mkRecord(int value) {
 	return &myRecord; // BAD: returns a pointer to `myRecord`, which is a stack-allocated object.
 }
 
+class Base {
+public:
+    int x;
+};
+
+class Derived: public Base {
+public:
+	int y;
+};
+
+void dereference_base(Base *b) {
+	b[2].x;
+}
+
+void dereference_derived(Derived *d) {
+	d[2].x;
+}
+
+static const int* xptr;
+
+void localAddressEscapes() {
+  int x = 0;
+  xptr = &x;
+}
+
+void example1() {
+  localAddressEscapes();
+  const int* x = xptr; // BAD: This pointer points to expired stack allocated memory.
+}
+
+void work(const char*);
+
+// BAD: the concatenated string is deallocated when `c_str` returns. So `work`
+// is given a pointer to invalid memory.
+void work_with_combined_string_bad(std::string s1, std::string s2) {
+  const char* combined_string = (s1 + s2).c_str();
+  work(combined_string);
+}
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
     
@@ -138,6 +177,9 @@ int main() {
     std::cout << "Record value: " << record->getValue() << std::endl;
     delete record;
 
+    Derived d[4];
+    dereference_base(d); // BAD: implicit conversion to Base*
+    dereference_derived(d); // GOOD: implicit conversion to Derived*, which will be the right size
 
     return 0;
 }
