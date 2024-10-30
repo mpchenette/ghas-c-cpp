@@ -17,6 +17,12 @@ void bufferOverflowExample(const char *input) {
     printf("Buffer content: %s\n", buffer);
 }
 
+void insecureHttpRequestExample() {
+    const char *url = "http://example.com"; // Insecure URL
+    printf("Making an insecure HTTP request to: %s\n", url);
+    // Simulate an HTTP request (actual network code omitted for simplicity)
+}
+
 int main() {
     printf("Hello, World!\n");
     
@@ -28,6 +34,9 @@ int main() {
 
     // buffer.c
     bufferOverflowExample("This is a very long input that will overflow the buffer");
+
+    // Demonstrate insecure HTTP request
+    insecureHttpRequestExample();
 
     return 0;
 }
