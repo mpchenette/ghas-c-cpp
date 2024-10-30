@@ -7,10 +7,10 @@ all: $(TARGET)
 $(TARGET): main.o Record.o
 	$(CC) $(CFLAGS) -o $(TARGET) main.o Record.o
 
-main.o: main.cpp main.h Record.h
+main.o: main.cpp main.hpp Record.hpp
 	$(CC) $(CFLAGS) -c main.cpp
 
-Record.o: Record.cpp Record.h
+Record.o: Record.cpp Record.hpp
 	$(CC) $(CFLAGS) -c Record.cpp
 
 clean:
