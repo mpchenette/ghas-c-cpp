@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <cstdio>
+#include <cstdlib>
 #include "main.h"
 
 void uninitializedVariableExample() {
@@ -44,6 +45,31 @@ void unsafeSprintfExample(const char *input) {
     std::cout << "Buffer content: " << buffer << std::endl;
 }
 
+void unsafeStrcatExample(const char *input) {
+    char buffer[10] = "Hello";
+    strcat(buffer, input); // Unsafe function, can cause buffer overflow
+    std::cout << "Buffer content: " << buffer << std::endl;
+}
+
+void formatStringVulnerabilityExample(const char *input) {
+    char buffer[100];
+    sprintf(buffer, input); // Format string vulnerability
+    std::cout << "Buffer content: " << buffer << std::endl;
+}
+
+void commandInjectionExample(const char *input) {
+    char command[100];
+    sprintf(command, "ls %s", input); // Command injection vulnerability
+    system(command);
+}
+
+void fopenWithoutCheckExample(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    // No check for null pointer
+    fprintf(file, "Writing to file without checking if it was opened successfully.\n");
+    fclose(file);
+}
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
     
@@ -63,6 +89,10 @@ int main() {
     unsafeGetsExample();
     unsafeStrcpyExample("This is a very long input that will overflow the buffer");
     unsafeSprintfExample("This is a very long input that will overflow the buffer");
+    unsafeStrcatExample("This is a very long input that will overflow the buffer");
+    formatStringVulnerabilityExample("This is a format string vulnerability");
+    commandInjectionExample("This is a command injection vulnerability");
+    fopenWithoutCheckExample("nonexistentfile.txt");
 
     return 0;
 }
