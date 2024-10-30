@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include "main.hpp"
 #include "Record.hpp"
+#include <sstream>
+#include <sqlite3.h>
 
 
 void uninitializedVariableExample() {
@@ -26,6 +28,28 @@ void insecureHttpRequestExample() {
     const char *url = "http://example.com"; // Insecure URL
     std::cout << "Making an insecure HTTP request to: " << url << std::endl;
     // Simulate an HTTP request (actual network code omitted for simplicity)
+}
+
+void sqlInjectionExample(const char *userInput) {
+    sqlite3 *db;
+    char *errMsg = 0;
+    int rc = sqlite3_open(":memory:", &db);
+
+    if (rc) {
+        std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    std::ostringstream sql;
+    sql << "SELECT * FROM users WHERE name = '" << userInput << "';"; // Potential SQL injection
+    rc = sqlite3_exec(db, sql.str().c_str(), 0, 0, &errMsg);
+
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL error: " << errMsg << std::endl;
+        sqlite3_free(errMsg);
+    }
+
+    sqlite3_close(db);
 }
 
 void unsafeGetsExample() {
@@ -97,6 +121,9 @@ int main() {
     // Demonstrate insecure HTTP request
     insecureHttpRequestExample();
 
+    // sql.cpp
+    sqlInjectionExample("'; DROP TABLE users; --");
+
     // Demonstrate unsafe functions
     unsafeGetsExample();
     unsafeStrcpyExample("This is a very long input that will overflow the buffer");
@@ -105,9 +132,9 @@ int main() {
     formatStringVulnerabilityExample("This is a format string vulnerability");
     commandInjectionExample("This is a command injection vulnerability");
     fopenWithoutCheckExample("nonexistentfile.txt");
-		signedOverflowCheck(100, 200);
+    signedOverflowCheck(100, 200);
 
-		Record *record = mkRecord(42);
+    Record *record = mkRecord(42);
     std::cout << "Record value: " << record->getValue() << std::endl;
     delete record;
 
