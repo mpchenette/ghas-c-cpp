@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include "main.h"
+#include "Record.h"
+
 
 void uninitializedVariableExample() {
     int x;
@@ -70,6 +72,16 @@ void fopenWithoutCheckExample(const char *filename) {
     fclose(file);
 }
 
+bool signedOverflowCheck(int n1, unsigned short delta) {
+    return n1 + delta < n1; // BAD
+}
+
+Record *mkRecord(int value) {
+	Record myRecord(value);
+
+	return &myRecord; // BAD: returns a pointer to `myRecord`, which is a stack-allocated object.
+}
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
     
@@ -93,6 +105,12 @@ int main() {
     formatStringVulnerabilityExample("This is a format string vulnerability");
     commandInjectionExample("This is a command injection vulnerability");
     fopenWithoutCheckExample("nonexistentfile.txt");
+		signedOverflowCheck(100, 200);
+
+		Record *record = mkRecord(42);
+    std::cout << "Record value: " << record->getValue() << std::endl;
+    delete record;
+
 
     return 0;
 }
