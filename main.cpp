@@ -2,8 +2,8 @@
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
-#include "main.h"
-#include "Record.h"
+#include "main.hpp"
+#include "Record.hpp"
 
 
 void uninitializedVariableExample() {
