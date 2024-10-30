@@ -49,10 +49,12 @@ TARGET = main
 all: $(TARGET)
 
 $(TARGET): main.o
-    $(CC) $(CFLAGS) -o $(TARGET) main.o
+	$(CC) $(CFLAGS) -o $(TARGET) main.o
 
 main.o: main.c main.h
-    $(CC) $(CFLAGS) -c main.c
+	$(CC) $(CFLAGS) -c main.c
 
 clean:
-    rm -f *.o $(TARGET)
+	rm -f *.o $(TARGET)
+
+.PHONY: all clean
