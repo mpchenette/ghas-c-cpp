@@ -136,8 +136,9 @@ void example1() {
   const int* x = xptr; // BAD: This pointer points to expired stack allocated memory.
 }
 
-void work(const char*);
-
+void work(const char* str) {
+    std::cout << "Working with string: " << str << std::endl;
+}
 // BAD: the concatenated string is deallocated when `c_str` returns. So `work`
 // is given a pointer to invalid memory.
 void work_with_combined_string_bad(std::string s1, std::string s2) {
