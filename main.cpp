@@ -186,5 +186,6 @@ int main() {
     dereference_base(d); // BAD: implicit conversion to Base*
     dereference_derived(d); // GOOD: implicit conversion to Derived*, which will be the right size
 
+    foo();
     return 0;
 }
