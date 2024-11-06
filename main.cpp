@@ -7,6 +7,12 @@
 #include <sstream>
 #include <sqlite3.h>
 
+enum privileges {
+    NONE,
+    READ,
+    WRITE,
+    FULL
+};
 
 void uninitializedVariableExample() {
     int x;
@@ -150,6 +156,10 @@ void work_with_combined_string_bad(std::string s1, std::string s2) {
   work(combined_string);
 }
 
+void restrict_privileges(privileges entitlements) {
+    std::cout << "Working with string: " << entitlements << std::endl;
+}
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
     
@@ -187,5 +197,12 @@ int main() {
     dereference_derived(d); // GOOD: implicit conversion to Derived*, which will be the right size
 
     foo();
+
+    enum privileges entitlements = NONE;
+    bool is_admin = false;
+    if (is_admin)
+        entitlements = FULL, // BAD
+
+    restrict_privileges(entitlements);
     return 0;
 }
