@@ -4,6 +4,8 @@
 Make an identical repo that is C, not C++
 
 ## Demo
+### Automatic Mode
+
 ### Manual Mode
 - easy, just change file to manual and add make clean, make
     - TODO: check if this is even needed. Not that the makefile works, does default setup work?
@@ -12,3 +14,5 @@ Make an identical repo that is C, not C++
 
 ### Changing Severity Alerts
 - Show the failure threshold under repo settings -> code security
+
+### Copilot Autofix

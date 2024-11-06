@@ -18,6 +18,10 @@ void nullPointerDereferenceExample() {
     *ptr = 42; // Dereferencing a null pointer
 }
 
+void foo() {
+    std::cout << "Inside foo" << std::endl;
+}
+
 void bufferOverflowExample(const char *input) {
     char buffer[10];
     std::strcpy(buffer, input); // Potential buffer overflow if input is larger than 10 characters
