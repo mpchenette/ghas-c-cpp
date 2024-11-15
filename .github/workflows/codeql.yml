@@ -40,7 +40,7 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        queries: +./${{ env.CI_TMP_DIR }}/codeql-custom-queries-cpp/example.ql, +./${{ env.CI_TMP_DIR }}/codeql-custom-queries-cpp/strncpy.pl, +security-extended
+        queries: +./${{ env.CI_TMP_DIR }}/codeql-custom-queries-cpp/example.ql, +./${{ env.CI_TMP_DIR }}/codeql-custom-queries-cpp/strncpy.ql, +security-extended
 
     - if: matrix.build-mode == 'manual'
       shell: bash
