@@ -204,5 +204,22 @@ int main() {
         entitlements = FULL, // BAD
 
     restrict_privileges(entitlements);
+
+
+
+
+    // CodeQL Query - Possibly wrong buffer size in string copy - https://codeql.github.com/codeql-query-help/cpp/cpp-bad-strncpy-size/
+    char src[256];
+    char dest1[128];
+
+    strncpy(dest1, src, sizeof(src)); // wrong: size of dest should be used
+
+    size_t sz1 = sizeof(src);
+    size_t sz2 = sizeof(dest1);
+    size_t sz3 = sizeof(dest1);
+    char *dest2 = (char *)malloc(sz1 + sz2 + sz3);
+    strncpy(dest2, src, strlen(src)); // wrong: size of dest should be used
+    ////////////
+
     return 0;
 }
