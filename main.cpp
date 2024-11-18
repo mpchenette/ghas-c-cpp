@@ -270,15 +270,15 @@ int main() {
 
     //////// Test code from Jake @ JCI //////
 
-    TCHAR szVar[16] = {0};
+    char szVar[16] = {0};
     // call a function to populate szVar
     size_t len = strlen(szVar);
     if (len)
     {
-        TCHAR *ptr = (TCHAR *)OSacquire(15 * sizeof(TCHAR));
+        char *ptr = (char *)OSacquire(15 * sizeof(char));
         if (ptr)
         {
-            OSstrcpy(ptr, szVar);
+            strcpy(ptr, szVar);
         }
     }
     //// end Jake @ JCI test code //////
