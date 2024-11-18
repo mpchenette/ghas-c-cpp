@@ -16,6 +16,6 @@ where
   sourceVar.getType() = sourceArrayType and
   destVar.getType() = destArrayType and
   sourceArrayType.getArraySize() > destArrayType.getArraySize()
-select strcpyCall, sourceVar, destVar,
+select strcpyCall, 
   sourceArrayType.getArraySize().toString() + " bytes copied into " +
   destArrayType.getArraySize().toString() + " bytes buffer"
