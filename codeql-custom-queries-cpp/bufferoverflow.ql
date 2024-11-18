@@ -1,39 +1,21 @@
 import cpp
-import semmle.code.cpp.dataflow.DataFlow
 
 /**
- * @name Potential buffer overflow due to insufficient allocation
- * @description This query identifies cases where a buffer is allocated with insufficient size to hold a copied string, including the null terminator.
+ * @name Detect strcpy with potential buffer overflow
+ * @description This query detects instances where strcpy is used to copy a string into a buffer that is smaller than the source string.
  * @kind problem
- * @problem.severity warning
- * @id cpp/buffer-overflow
+ * @problem.severity error
+ * @id cpp/strcpy-buffer-overflow
  */
-class InsufficientBufferAllocation extends DataFlow::Configuration {
-// class InsufficientBufferAllocation extends TaintTracking::Configuration {
-  InsufficientBufferAllocation() { this = "InsufficientBufferAllocation" }
 
-  override predicate isSource(DataFlow::Node source) {
-    exists(FunctionCall fc |
-      fc.getTarget().hasName("OSacquire") and
-      source.asExpr() = fc.getArgument(0)
-    )
-  }
-
-  override predicate isSink(DataFlow::Node sink) {
-    exists(FunctionCall fc |
-      fc.getTarget().hasName("strcpy") and
-      sink.asExpr() = fc.getArgument(0)
-    )
-  }
-
-  // override predicate isSanitizer(DataFlow::Node sanitizer) {
-  //   exists(FunctionCall fc |
-  //     fc.getTarget().hasName("strlen") and
-  //     sanitizer.asExpr() = fc.getArgument(0)
-  //   )
-  // }
-}
-
-from InsufficientBufferAllocation cfg, DataFlow::PathNode source, DataFlow::PathNode sink
-where cfg.hasFlowPath(source, sink)
-select sink.getNode(), "Potential buffer overflow due to insufficient allocation."
+from FunctionCall strcpyCall, VariableAccess sourceVar, VariableAccess destVar, ArrayType sourceArrayType, ArrayType destArrayType
+where
+  strcpyCall.getTarget().hasName("strcpy") and
+  strcpyCall.getArgument(0) = destVar and
+  strcpyCall.getArgument(1) = sourceVar and
+  sourceVar.getType() = sourceArrayType and
+  destVar.getType() = destArrayType and
+  sourceArrayType.getArraySize() > destArrayType.getArraySize()
+select strcpyCall, sourceVar, destVar,
+  sourceArrayType.getArraySize().toString() + " bytes copied into " +
+  destArrayType.getArraySize().toString() + " bytes buffer"
