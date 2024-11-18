@@ -37,9 +37,10 @@ class StrcpyCall extends FunctionCall
     Expr getDestination() { result = this.getArgument(0) }
 }
 
-from StrcpyCall strcpy, MallocCall malloc, VariableAccess srcLen, VariableAccess allocSize
+from StrcpyCall strcpy, MallocCall malloc
 where
-    strcpy.getSource() = srcLen and
-    malloc.getAllocatedSize() = allocSize and
-    srcLen.getType().getSize() + 1 > allocSize.getType().getSize()
+    // Check if the source length is greater than the allocated size
+    (strcpy.getSource() instanceof StringLiteral and
+     malloc.getAllocatedSize() instanceof IntegerLiteral and
+     strlen(strcpy.getSource().getValue()) + 1 > malloc.getAllocatedSize().getValue().toInt())
 select strcpy, "This allocation may cause a buffer overflow."
