@@ -275,7 +275,7 @@ int main() {
     size_t len = strlen(szVar);
     if (len)
     {
-        char *ptr = (char *)OSacquire(15 * sizeof(char));
+        char *ptr = (char *)OSacquire(24 * sizeof(char));
         if (ptr)
         {
             strcpy(ptr, szVar);
