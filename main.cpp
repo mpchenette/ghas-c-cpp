@@ -7,6 +7,50 @@
 #include <sstream>
 #include <sqlite3.h>
 
+
+
+//////// For test code from Jake @ JCI //////
+#include <cassert>
+
+#ifdef RTOS
+#define OSstrcpy     uniStrCpy // for RTOS
+#endif
+
+#ifdef _WIN32 || _WIN64
+#define OSstrcpy    _tcscpy // for win32
+#endif
+
+#ifdef __unix__
+#define OSstrcpy   strcpy // for unix
+#endif
+
+#ifdef __APPLE__ || __MACH__
+#define OSstrcpy   strcpy // for macos
+#endif
+
+#ifdef _WIN32
+#include <tchar.h>
+#else
+typedef char TCHAR;
+#endif
+
+void * OSacquireinternal(size_t Size, int lineNum,const char * fileName)
+{
+if(Size > 0)
+  return(calloc(1, Size));
+else
+  {
+  // assert if zero bytes requested
+  assert(false);
+  return(NULL);
+  }
+}
+
+#define OSacquire(a) OSacquireinternal(a,__LINE__,__FILE__)
+
+
+/////// end test code from Jake @ JCI //////
+
 enum privileges {
     NONE,
     READ,
@@ -220,6 +264,24 @@ int main() {
     char *dest2 = (char *)malloc(sz1 + sz2 + sz3);
     strncpy(dest2, src, strlen(src)); // wrong: size of dest should be used
     ////////////
+
+
+
+
+    //////// Test code from Jake @ JCI //////
+
+    TCHAR szVar[16] = {NULL};
+    // call a function to populate szVar
+    size_t len = strlen(szVar);
+    if (len)
+    {
+        TCHAR *ptr = (TCHAR *)OSacquire(15 * sizeof(TCHAR));
+        if (ptr)
+        {
+            OSstrcpy(ptr, szVar);
+        }
+    }
+    //// end Jake @ JCI test code //////
 
     return 0;
 }
