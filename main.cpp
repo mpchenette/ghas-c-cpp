@@ -7,25 +7,23 @@
 #include <sstream>
 #include <sqlite3.h>
 
-
-
 //////// For test code from Jake @ JCI //////
 #include <cassert>
 
 #ifdef RTOS
-#define OSstrcpy     uniStrCpy // for RTOS
+#define OSstrcpy uniStrCpy // for RTOS
 #endif
 
 #ifdef _WIN32 || _WIN64
-#define OSstrcpy    _tcscpy // for win32
+#define OSstrcpy _tcscpy // for win32
 #endif
 
 #ifdef __unix__
-#define OSstrcpy   strcpy // for unix
+#define OSstrcpy strcpy // for unix
 #endif
 
 #ifdef __APPLE__ || __MACH__
-#define OSstrcpy   strcpy // for macos
+#define OSstrcpy strcpy // for macos
 #endif
 
 #ifdef _WIN32
@@ -34,62 +32,61 @@
 typedef char TCHAR;
 #endif
 
-void * OSacquireinternal(size_t Size, int lineNum,const char * fileName)
+void *OSacquireinternal(size_t Size, int lineNum, const char *fileName)
 {
-if(Size > 0)
-  return(calloc(1, Size));
-else
-  {
-  // assert if zero bytes requested
-  assert(false);
-  return(NULL);
-  }
 }
 
-#define OSacquire(a) OSacquireinternal(a,__LINE__,__FILE__)
-
+#define OSacquire(a) OSacquireinternal(a, __LINE__, __FILE__)
 
 /////// end test code from Jake @ JCI //////
 
-enum privileges {
+enum privileges
+{
     NONE,
     READ,
     WRITE,
     FULL
 };
 
-void uninitializedVariableExample() {
+void uninitializedVariableExample()
+{
     int x;
     std::cout << "Value of x: " << x << std::endl; // Use of uninitialized variable
 }
 
-void nullPointerDereferenceExample() {
+void nullPointerDereferenceExample()
+{
     int *ptr = nullptr;
     *ptr = 42; // Dereferencing a null pointer
 }
 
-void foo() {
+void foo()
+{
     std::cout << "Inside foo" << std::endl;
 }
 
-void bufferOverflowExample(const char *input) {
+void bufferOverflowExample(const char *input)
+{
     char buffer[10];
     std::strcpy(buffer, input); // Potential buffer overflow if input is larger than 10 characters
     std::cout << "Buffer content: " << buffer << std::endl;
 }
 
-void insecureHttpRequestExample() {
+void insecureHttpRequestExample()
+{
     const char *url = "http://example.com"; // Insecure URL
     std::cout << "Making an insecure HTTP request to: " << url << std::endl;
     // Simulate an HTTP request (actual network code omitted for simplicity)
 }
 
-void sqlInjectionExample(const char *userInput) {
+void sqlInjectionExample(const char *userInput)
+{
     sqlite3 *db;
     char *errMsg = 0;
     int rc = sqlite3_open(":memory:", &db);
 
-    if (rc) {
+    if (rc)
+    {
         std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
@@ -98,7 +95,8 @@ void sqlInjectionExample(const char *userInput) {
     sql << "SELECT * FROM users WHERE name = '" << userInput << "';"; // Potential SQL injection
     rc = sqlite3_exec(db, sql.str().c_str(), 0, 0, &errMsg);
 
-    if (rc != SQLITE_OK) {
+    if (rc != SQLITE_OK)
+    {
         std::cerr << "SQL error: " << errMsg << std::endl;
         sqlite3_free(errMsg);
     }
@@ -106,107 +104,126 @@ void sqlInjectionExample(const char *userInput) {
     sqlite3_close(db);
 }
 
-void unsafeGetsExample() {
+void unsafeGetsExample()
+{
     char buffer[10];
     std::cout << "Enter a string: ";
     gets(buffer); // Unsafe function, can cause buffer overflow
     std::cout << "You entered: " << buffer << std::endl;
 }
 
-void unsafeStrcpyExample(const char *input) {
+void unsafeStrcpyExample(const char *input)
+{
     char buffer[10];
     strcpy(buffer, input); // Unsafe function, can cause buffer overflow
     std::cout << "Buffer content: " << buffer << std::endl;
 }
 
-void unsafeSprintfExample(const char *input) {
+void unsafeSprintfExample(const char *input)
+{
     char buffer[10];
     sprintf(buffer, "%s", input); // Unsafe function, can cause buffer overflow
     std::cout << "Buffer content: " << buffer << std::endl;
 }
 
-void unsafeStrcatExample(const char *input) {
+void unsafeStrcatExample(const char *input)
+{
     char buffer[10] = "Hello";
     strcat(buffer, input); // Unsafe function, can cause buffer overflow
     std::cout << "Buffer content: " << buffer << std::endl;
 }
 
-void formatStringVulnerabilityExample(const char *input) {
+void formatStringVulnerabilityExample(const char *input)
+{
     char buffer[100];
     sprintf(buffer, input); // Format string vulnerability
     std::cout << "Buffer content: " << buffer << std::endl;
 }
 
-void commandInjectionExample(const char *input) {
+void commandInjectionExample(const char *input)
+{
     char command[100];
     sprintf(command, "ls %s", input); // Command injection vulnerability
     system(command);
 }
 
-void fopenWithoutCheckExample(const char *filename) {
+void fopenWithoutCheckExample(const char *filename)
+{
     FILE *file = fopen(filename, "r");
     // No check for null pointer
     fprintf(file, "Writing to file without checking if it was opened successfully.\n");
     fclose(file);
 }
 
-bool signedOverflowCheck(int n1, unsigned short delta) {
+bool signedOverflowCheck(int n1, unsigned short delta)
+{
     return n1 + delta < n1; // BAD
 }
 
-Record *mkRecord(int value) {
-	Record myRecord(value);
+Record *mkRecord(int value)
+{
+    Record myRecord(value);
 
-	return &myRecord; // BAD: returns a pointer to `myRecord`, which is a stack-allocated object.
+    return &myRecord; // BAD: returns a pointer to `myRecord`, which is a stack-allocated object.
 }
 
-class Base {
+class Base
+{
 public:
     int x;
 };
 
-class Derived: public Base {
+class Derived : public Base
+{
 public:
-	int y;
+    int y;
 };
 
-void dereference_base(Base *b) {
-	b[2].x;
+void dereference_base(Base *b)
+{
+    b[2].x;
 }
 
-void dereference_derived(Derived *d) {
-	d[2].x;
+void dereference_derived(Derived *d)
+{
+    d[2].x;
 }
 
-static const int* xptr;
+static const int *xptr;
 
-void localAddressEscapes() {
-  int x = 0;
-  xptr = &x;
+void localAddressEscapes()
+{
+    int x = 0;
+    xptr = &x;
 }
 
-void example1() {
-  localAddressEscapes();
-  const int* x = xptr; // BAD: This pointer points to expired stack allocated memory.
+void example1()
+{
+    localAddressEscapes();
+    const int *x = xptr; // BAD: This pointer points to expired stack allocated memory.
 }
 
-void work(const char* str) {
+void work(const char *str)
+{
     std::cout << "Working with string: " << str << std::endl;
 }
 // BAD: the concatenated string is deallocated when `c_str` returns. So `work`
 // is given a pointer to invalid memory.
-void work_with_combined_string_bad(std::string s1, std::string s2) {
-  const char* combined_string = (s1 + s2).c_str();
-  work(combined_string);
+void work_with_combined_string_bad(std::string s1, std::string s2)
+{
+    const char *combined_string = (s1 + s2).c_str();
+    work(combined_string);
 }
 
-void restrict_privileges(privileges entitlements) {
+void restrict_privileges(privileges entitlements)
+{
     std::cout << "Working with string: " << entitlements << std::endl;
 }
 
-int main() {
+int main()
+{
     std::cout << "Hello, World!" << std::endl;
-    
+
     // vars.cpp
     uninitializedVariableExample();
 
@@ -237,7 +254,7 @@ int main() {
     delete record;
 
     Derived d[4];
-    dereference_base(d); // BAD: implicit conversion to Base*
+    dereference_base(d);    // BAD: implicit conversion to Base*
     dereference_derived(d); // GOOD: implicit conversion to Derived*, which will be the right size
 
     foo();
@@ -247,10 +264,7 @@ int main() {
     if (is_admin)
         entitlements = FULL, // BAD
 
-    restrict_privileges(entitlements);
-
-
-
+            restrict_privileges(entitlements);
 
     // CodeQL Query - Possibly wrong buffer size in string copy - https://codeql.github.com/codeql-query-help/cpp/cpp-bad-strncpy-size/
     char src[256];
@@ -265,17 +279,14 @@ int main() {
     strncpy(dest2, src, strlen(src)); // wrong: size of dest should be used
     ////////////
 
-
-
-
     //////// Test code from Jake @ JCI //////
-
     char szVar[16] = {0};
     // call a function to populate szVar
-    size_t len = strlen(szVar);
+    uint16_t len = strlen(szVar);
     if (len)
     {
-        char *ptr = (char *)OSacquire(24 * sizeof(char));
+        char *ptr = (char *)calloc(1, 24 * sizeof(char));
+        // char *ptr = (char *)OSacquire();
         if (ptr)
         {
             strcpy(ptr, szVar);
