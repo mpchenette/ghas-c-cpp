@@ -1,3 +1,13 @@
+
+/**
+ * @kind problem
+ * @id cpp/buffer-overflow
+ * @name Buffer Overflow
+ * @description Detects potential buffer overflow issues.
+ * @severity error
+ * @precision high
+ */
+
 import cpp
 import semmle.code.cpp.controlflow.SSA
 
