@@ -5,6 +5,11 @@
  * @description Detects potential buffer overflow issues.
  * @severity error
  * @precision high
+ * @tags maintainability
+ *       readability
+ *       security
+ *       external/cwe/cwe-1078
+ *       external/cwe/cwe-670
  */
 
 import cpp
