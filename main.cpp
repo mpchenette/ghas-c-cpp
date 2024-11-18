@@ -270,7 +270,7 @@ int main() {
 
     //////// Test code from Jake @ JCI //////
 
-    TCHAR szVar[16] = {NULL};
+    TCHAR szVar[16] = {0};
     // call a function to populate szVar
     size_t len = strlen(szVar);
     if (len)
