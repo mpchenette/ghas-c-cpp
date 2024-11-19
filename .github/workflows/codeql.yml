@@ -2,7 +2,7 @@ name: "CodeQL Advanced"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "JCI" ]
   pull_request:
     branches: [ "main" ]
   schedule:
@@ -11,11 +11,6 @@ on:
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
-    # Runner size impacts CodeQL analysis time. To learn more, please see:
-    #   - https://gh.io/recommended-hardware-resources-for-running-codeql
-    #   - https://gh.io/supported-runners-and-hardware-resources
-    #   - https://gh.io/using-larger-runners (GitHub.com only)
-    # Consider using larger runners or machines with greater resources for possible analysis time improvements.
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     permissions:
       security-events: write
@@ -28,25 +23,18 @@ jobs:
       matrix:
         include:
         - language: c-cpp
-          build-mode: manual #autobuild
+          build-mode: autobuild
   
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        queries: +security-extended #+./${{ env.CI_TMP_DIR }}/codeql-custom-queries-cpp/bufferoverflow.ql #+security-extended #+./${{ env.CI_TMP_DIR }}/codeql-custom-queries-cpp/strncpy.ql, +./${{ env.CI_TMP_DIR }}/codeql-custom-queries-cpp/example.ql, 
-
-    - if: matrix.build-mode == 'manual'
-      shell: bash
-      run: |
-        make clean
-        make        
+        queries: +security-extended
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
