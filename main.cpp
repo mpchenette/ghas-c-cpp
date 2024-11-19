@@ -32,6 +32,9 @@
 typedef char TCHAR;
 #endif
 
+typedef uint16_t UNSIGNED16;
+#define OSstrlen strlen // for macos
+
 void *OSacquireinternal(size_t Size, int lineNum, const char *fileName)
 {
     if (Size > 0)
@@ -288,8 +291,9 @@ int main()
     //     ////////////
 
     //////// Test code from Jake @ JCI //////
+    uint16_t len;
     TCHAR szVar[12] = "Hello World";
-    uint16_t len = strlen(szVar);
+    len = (UNSIGNED16)OSstrlen(szVar);
     if (len)
     {
         TCHAR *ptr = (TCHAR *)calloc(1, 5 * sizeof(TCHAR));
