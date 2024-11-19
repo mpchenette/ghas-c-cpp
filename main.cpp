@@ -21,6 +21,7 @@ void *OSacquireinternal(size_t Size, int lineNum, const char *fileName)
 
 int main()
 {
+    // WORKING
     uint16_t len;
     char szVar[16] = "hello world....";
     len = (uint16_t)strlen(szVar);
@@ -30,6 +31,22 @@ int main()
         if (ptr)
         {
             strcpy(ptr, szVar);
+        }
+    }
+
+
+
+
+    // NOT WORKING
+    uint16_t len2;
+    char szVar2[16] = "hello world....";
+    len2 = (uint16_t)strlen(szVar2);
+    if (len2)
+    {
+        char *ptr2 = (char *)calloc(1, 15 * sizeof(char));
+        if (ptr2)
+        {
+            strcpy(ptr2, szVar2);
         }
     }
     return 0;
