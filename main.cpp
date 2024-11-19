@@ -280,7 +280,7 @@ int main()
 //     ////////////
 
     //////// Test code from Jake @ JCI //////
-    TCHAR szVar[16] = {NULL};
+    TCHAR szVar[12] = "Hello World";
     uint16_t len = strlen(szVar);
     if (len)
     {
