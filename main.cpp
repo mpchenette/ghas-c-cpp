@@ -280,15 +280,14 @@ int main()
 //     ////////////
 
     //////// Test code from Jake @ JCI //////
-    char szVar[12] = "Hello World";
+    TCHAR szVar[16] = {NULL};
     uint16_t len = strlen(szVar);
     if (len)
     {
-        char *ptr = (char *)calloc(1, 5 * sizeof(char));
+        char *ptr = (TCHAR *)calloc(1, 5 * sizeof(TCHAR));
         if (ptr)
         {
             strcpy(ptr, szVar);
-            free(ptr);
         }
     }
     //// end Jake @ JCI test code //////
