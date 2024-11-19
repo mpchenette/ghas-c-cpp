@@ -291,12 +291,16 @@ int main()
     //     ////////////
 
     //////// Test code from Jake @ JCI //////
-    uint16_t len;
-    TCHAR szVar[12] = "Hello World";
+    // assumptions
+    UNSIGNED16 len;
+
+    // test code
+    TCHAR szVar[16] = "hello world....";
+    // call a function to populate szVar
     len = (UNSIGNED16)OSstrlen(szVar);
     if (len)
     {
-        TCHAR *ptr = (TCHAR *)calloc(1, 5 * sizeof(TCHAR));
+        TCHAR *ptr = (TCHAR *)calloc(1, 15 * sizeof(TCHAR));
         if (ptr)
         {
             OSstrcpy(ptr, szVar);
