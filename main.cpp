@@ -292,7 +292,7 @@ int main()
     uint16_t len = strlen(szVar);
     if (len)
     {
-        TCHAR *ptr = (TCHAR *)OSacquire(5 * sizeof(TCHAR));
+        TCHAR *ptr = (TCHAR *)calloc(1, 5 * sizeof(TCHAR));
         if (ptr)
         {
             OSstrcpy(ptr, szVar);
