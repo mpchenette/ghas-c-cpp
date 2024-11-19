@@ -43,7 +43,7 @@ int main()
     len2 = (uint16_t)strlen(szVar2);
     if (len2)
     {
-        char *ptr2 = (char *)calloc(1, 15 * sizeof(char));
+        char *ptr2 = (char *)OSacquire(15 * sizeof(char));
         if (ptr2)
         {
             strcpy(ptr2, szVar2);
