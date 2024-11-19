@@ -34,6 +34,14 @@ typedef char TCHAR;
 
 void *OSacquireinternal(size_t Size, int lineNum, const char *fileName)
 {
+    if (Size > 0)
+        return (calloc(1, Size));
+    else
+    {
+        // assert if zero bytes requested
+        assert(false);
+        return (NULL);
+    }
 }
 
 #define OSacquire(a) OSacquireinternal(a, __LINE__, __FILE__)
@@ -222,72 +230,72 @@ void *OSacquireinternal(size_t Size, int lineNum, const char *fileName)
 
 int main()
 {
-//     std::cout << "Hello, World!" << std::endl;
+    //     std::cout << "Hello, World!" << std::endl;
 
-//     // vars.cpp
-//     uninitializedVariableExample();
+    //     // vars.cpp
+    //     uninitializedVariableExample();
 
-//     // pointer.cpp
-//     nullPointerDereferenceExample();
+    //     // pointer.cpp
+    //     nullPointerDereferenceExample();
 
-//     // buffer.cpp
-//     bufferOverflowExample("This is a very long input that will overflow the buffer");
+    //     // buffer.cpp
+    //     bufferOverflowExample("This is a very long input that will overflow the buffer");
 
-//     // Demonstrate insecure HTTP request
-//     insecureHttpRequestExample();
+    //     // Demonstrate insecure HTTP request
+    //     insecureHttpRequestExample();
 
-//     // sql.cpp
-//     sqlInjectionExample("'; DROP TABLE users; --");
+    //     // sql.cpp
+    //     sqlInjectionExample("'; DROP TABLE users; --");
 
-//     // Demonstrate unsafe functions
-//     unsafeGetsExample();
-//     unsafeStrcpyExample("This is a very long input that will overflow the buffer");
-//     unsafeSprintfExample("This is a very long input that will overflow the buffer");
-//     unsafeStrcatExample("This is a very long input that will overflow the buffer");
-//     formatStringVulnerabilityExample("This is a format string vulnerability");
-//     commandInjectionExample("This is a command injection vulnerability");
-//     fopenWithoutCheckExample("nonexistentfile.txt");
-//     signedOverflowCheck(100, 200);
+    //     // Demonstrate unsafe functions
+    //     unsafeGetsExample();
+    //     unsafeStrcpyExample("This is a very long input that will overflow the buffer");
+    //     unsafeSprintfExample("This is a very long input that will overflow the buffer");
+    //     unsafeStrcatExample("This is a very long input that will overflow the buffer");
+    //     formatStringVulnerabilityExample("This is a format string vulnerability");
+    //     commandInjectionExample("This is a command injection vulnerability");
+    //     fopenWithoutCheckExample("nonexistentfile.txt");
+    //     signedOverflowCheck(100, 200);
 
-//     Record *record = mkRecord(42);
-//     std::cout << "Record value: " << record->getValue() << std::endl;
-//     delete record;
+    //     Record *record = mkRecord(42);
+    //     std::cout << "Record value: " << record->getValue() << std::endl;
+    //     delete record;
 
-//     Derived d[4];
-//     dereference_base(d);    // BAD: implicit conversion to Base*
-//     dereference_derived(d); // GOOD: implicit conversion to Derived*, which will be the right size
+    //     Derived d[4];
+    //     dereference_base(d);    // BAD: implicit conversion to Base*
+    //     dereference_derived(d); // GOOD: implicit conversion to Derived*, which will be the right size
 
-//     foo();
+    //     foo();
 
-//     enum privileges entitlements = NONE;
-//     bool is_admin = false;
-//     if (is_admin)
-//         entitlements = FULL, // BAD
+    //     enum privileges entitlements = NONE;
+    //     bool is_admin = false;
+    //     if (is_admin)
+    //         entitlements = FULL, // BAD
 
-//             restrict_privileges(entitlements);
+    //             restrict_privileges(entitlements);
 
-//     // CodeQL Query - Possibly wrong buffer size in string copy - https://codeql.github.com/codeql-query-help/cpp/cpp-bad-strncpy-size/
-//     char src[256];
-//     char dest1[128];
+    //     // CodeQL Query - Possibly wrong buffer size in string copy - https://codeql.github.com/codeql-query-help/cpp/cpp-bad-strncpy-size/
+    //     char src[256];
+    //     char dest1[128];
 
-//     strncpy(dest1, src, sizeof(src)); // wrong: size of dest should be used
+    //     strncpy(dest1, src, sizeof(src)); // wrong: size of dest should be used
 
-//     size_t sz1 = sizeof(src);
-//     size_t sz2 = sizeof(dest1);
-//     size_t sz3 = sizeof(dest1);
-//     char *dest2 = (char *)malloc(sz1 + sz2 + sz3);
-//     strncpy(dest2, src, strlen(src)); // wrong: size of dest should be used
-//     ////////////
+    //     size_t sz1 = sizeof(src);
+    //     size_t sz2 = sizeof(dest1);
+    //     size_t sz3 = sizeof(dest1);
+    //     char *dest2 = (char *)malloc(sz1 + sz2 + sz3);
+    //     strncpy(dest2, src, strlen(src)); // wrong: size of dest should be used
+    //     ////////////
 
     //////// Test code from Jake @ JCI //////
     TCHAR szVar[12] = "Hello World";
     uint16_t len = strlen(szVar);
     if (len)
     {
-        char *ptr = (TCHAR *)calloc(1, 5 * sizeof(TCHAR));
+        TCHAR *ptr = (TCHAR *)OSacquire(5 * sizeof(TCHAR));
         if (ptr)
         {
-            strcpy(ptr, szVar);
+            OSstrcpy(ptr, szVar);
         }
     }
     //// end Jake @ JCI test code //////
